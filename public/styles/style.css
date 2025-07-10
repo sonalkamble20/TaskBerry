@@ -1,0 +1,127 @@
+body {
+    background-image: url(../Images/to-do.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: lightpink;
+    background-position: left center;
+    background-attachment: fixed;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.content {
+    position: relative;
+    max-width: 800px;
+    margin: 200px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button, .submit-button{
+    background-color: bisque;
+    font-size: 30px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin: 10px;  
+}
+
+button:active, .submit-button:active{
+    background-color: chocolate;
+}
+
+.user-details{
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+input[type="text"], 
+input[type="password"] {
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height:auto;
+}
+
+main {
+    flex-grow: 1;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    top: 15px;
+    background-color: #333;
+    color: white;
+    width: 98%;
+    height: 80px;
+    padding-left: 20px;
+    border-radius: 10px;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 20px;
+    background-color: #333;
+    color: white;
+    padding-left: 5px;
+    width: 98%;
+    padding-left: 20px;
+    border-radius: 10px;
+}
+
+/* Job Listing Styles */
+#jobTable {
+    margin-top: 30px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.job-row {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid #ccc;
+    transition: background-color 0.3s;
+}
+
+.job-row:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.job-cell {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 16px;
+    border-right: 1px solid #ccc;
+}
+
+.job-cell:last-child {
+    border-right: none;
+}
+
+th {
+    background-color: #f2b9b9;
+    font-weight: bold;
+}
+
+.job-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #333;
+    color: white;
+}
+
+.job-cell, .job-header {
+    border-top: 1px solid #ccc;
+}

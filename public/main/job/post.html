@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Post</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>Make a TO-DO List</h1>
+      <nav>
+        <a href="../extra/home.html"><button>Home</button></a>
+        <a href="../extra/about.html"><button>About</button></a>
+        <a href="../extra/contactus.html"><button>Contact Us</button></a>
+      </nav>
+    </header>
+
+    <main class="content">
+      <h1>Add a Task!</h1>
+      <hr />
+      <form id="post">
+        <input id="jobname" type="text" placeholder="Enter a task to-do" required />
+        <input id="description" type="text" placeholder="Enter a description (optional)" />
+        <button type="submit" class="submit-button">Add</button>
+        <p>Note: Your tasks will be saved to your account.</p>
+      </form>
+
+      <h2>Your Jobs</h2>
+      <table id="jobTable">
+        <thead>
+          <tr>
+            <th>Job ID</th>
+            <th>Job Name</th>
+            <th>Job Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="jobList"></tbody>
+      </table>
+    </main>
+
+    <footer>
+      <h3>Kamble Tech and Co. &copy;</h3>
+      <a href="../extra/home.html"><button id="logoutBtn">Logout</button></a>
+    </footer>
+  </div>
+
+  <script>
+    if (!localStorage.getItem("userId")) {
+      window.location.href = "../login/login.html";
+    }
+  </script>
+  <script src="addJob.js"></script>
+</body>
+</html>

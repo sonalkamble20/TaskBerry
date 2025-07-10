@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../../styles/style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>List Down</h1>
+            <div>
+                <nav>
+                    <a href ="../extra/about.html"><button>About</button></a>
+                    <a href ="../extra/contactus.html"><button>Contact Us</button></a>
+                    <a href ="../login/login.html"><button>Login</button></a>
+                    <a href ="../register/register.html"><button>Register</button></a>
+                </nav>
+            </div>
+        </header>
+        
+        <main class="content">
+            <h2>Welcome!</h2>
+            
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nam distinctio aspernatur cumque architecto incidunt aliquid, ex ipsum culpa rerum, porro tenetur id at voluptas adipisci. Fugiat et reprehenderit harum.</p>
+
+            <!-- Button to fetch all users -->
+            <button id="listUsersBtn">List All Users</button>
+
+            <!-- Div to display the users -->
+            <div id="userList"></div>
+        </main>
+        
+        <footer>
+            <h3>Kamble Tech and Co. &copy</h3>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById("listUsersBtn").addEventListener("click", function () {
+            // Fetch the list of users from the backend
+            fetch("http://localhost:3000/user/getUsers")
+                .then(response => response.json())
+                .then(users => {
+                    console.log("Users fetched from the backend:", users); // Log the fetched users
+                    
+                    let userListDiv = document.getElementById("userList");
+                    userListDiv.innerHTML = "";  // Clear any previous data
+                    
+                    if (users && users.length > 0) {
+                        const userList = document.createElement("ul");
+                        users.forEach(user => {
+                            const userItem = document.createElement("li");
+                            userItem.textContent = `${user.Username} (ID: ${user.UserID})`;
+                            userList.appendChild(userItem);
+                        });
+                        userListDiv.appendChild(userList);
+                    } else {
+                        userListDiv.textContent = "No users found.";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching users:", error);
+                    alert("Failed to fetch users.");
+                });
+        });
+    </script>
+</body>
+</html>
