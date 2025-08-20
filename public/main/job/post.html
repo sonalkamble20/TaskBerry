@@ -3,13 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Post</title>
+  <title>Post · TaskBerry</title>
   <link rel="stylesheet" href="../../styles/style.css">
+  <style>
+    .content-wide{max-width:1400px;}
+    .job-form-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr auto; /* Task | Description | Add */
+      gap:12px;
+      align-items:end;
+      margin:.75rem 0 1rem;
+    }
+    .job-form-grid input{width:100%;}
+    #welcomeUser{
+      float:right; background:var(--card-bg); border:1px solid var(--table-border);
+      padding:6px 10px; border-radius:999px; font-weight:600; font-size:16px;
+      margin:0 0 8px 0; white-space:nowrap;
+    }
+    @media (max-width: 720px){
+      .job-form-grid{grid-template-columns:1fr; align-items:stretch;}
+    }
+  </style>
 </head>
 <body>
   <div class="wrapper">
     <header>
-      <h1>Make a TO-DO List</h1>
+      <div class="brandline">
+        <h1 class="site-title">TaskBerry</h1>
+        <span class="slogan">- procrastination who??</span>
+      </div>
       <nav>
         <a href="../extra/home.html"><button>Home</button></a>
         <a href="../extra/about.html"><button>About</button></a>
@@ -17,41 +39,78 @@
       </nav>
     </header>
 
-    <main class="content">
-      <h1>Add a Task!</h1>
-      <hr />
-      <form id="post">
-        <input id="jobname" type="text" placeholder="Enter a task to-do" required />
-        <input id="description" type="text" placeholder="Enter a description (optional)" />
-        <button type="submit" class="submit-button">Add</button>
-        <p>Note: Your tasks will be saved to your account.</p>
+    <main class="content content-wide">
+      <div id="welcomeUser"></div>
+
+      <h1 style="display:flex; align-items:center; gap:10px; margin-top:0; clear:both;">
+        <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" style="flex:none;">
+          <rect x="4" y="3" width="16" height="18" rx="3" fill="var(--card-bg)" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="8" cy="6.2" r="0.9" fill="var(--btn-bg)"/>
+          <circle cx="12" cy="6.2" r="0.9" fill="var(--btn-bg)"/>
+          <circle cx="16" cy="6.2" r="0.9" fill="var(--btn-bg)"/>
+          <path d="M8 12.5l2.3 2.3L16 9.8" fill="none" stroke="var(--btn-active-bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Add a Task
+      </h1>
+
+      <form id="jobForm" class="job-form-grid">
+        <div>
+          <label for="jobname" style="display:block; font-weight:600; margin-bottom:6px;">Task</label>
+          <input id="jobname" type="text" placeholder="What do you need to do?" required />
+        </div>
+
+        <div>
+          <label for="description" style="display:block; font-weight:600; margin-bottom:6px;">Description <span style="opacity:.7; font-weight:400;">(optional)</span></label>
+          <input id="description" type="text" placeholder="Add a note, context, or details" />
+        </div>
+
+        <div style="display:flex; align-items:end;">
+          <button type="submit" class="submit-button" style="height:48px;">Add</button>
+        </div>
       </form>
 
-      <h2>Your Jobs</h2>
-      <table id="jobTable">
-        <thead>
-          <tr>
-            <th>Job ID</th>
-            <th>Job Name</th>
-            <th>Job Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="jobList"></tbody>
-      </table>
+      <h2 style="display:flex; align-items:center; gap:8px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="3" width="16" height="18" rx="2.6" fill="var(--card-bg)" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M7.5 8.2h9M7.5 11.5h9M7.5 14.8h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        Your Jobs
+      </h2>
+
+      <div class="table-shell table-narrow">
+        <table id="jobTable" aria-describedby="jobTableCaption">
+          <colgroup>
+            <col class="col-select" />
+            <col class="col-id" />
+            <col class="col-name" />
+            <col class="col-desc" />
+            <col class="col-status" />
+          </colgroup>
+          <caption id="jobTableCaption">All tasks linked to your account</caption>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Job ID</th>
+              <th>Job Name</th>
+              <th>Job Description</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="jobList"></tbody>
+        </table>
+
+        <div class="table-footer-actions">
+          <button id="deleteSelectedBtn" disabled>Delete Selected</button>
+        </div>
+      </div>
     </main>
 
     <footer>
       <h3>Kamble Tech and Co. &copy;</h3>
-      <a href="../extra/home.html"><button id="logoutBtn">Logout</button></a>
+      <button id="logoutBtn">Logout</button>
     </footer>
   </div>
 
-  <script>
-    if (!localStorage.getItem("userId")) {
-      window.location.href = "../login/login.html";
-    }
-  </script>
-  <script src="addJob.js"></script>
+  <script src="addJob.js" defer></script>
 </body>
 </html>

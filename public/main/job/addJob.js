@@ -1,129 +1,205 @@
-document.addEventListener("DOMContentLoaded", function () {
+// public/main/add job/addJob.js
+document.addEventListener("DOMContentLoaded", () => {
   const userId = localStorage.getItem("userId");
-  let editingJobId = null;
+  const username = localStorage.getItem("username");
 
-  if (!userId) {
-    alert("User not logged in. Please log in first.");
+  if (!userId || userId === "undefined" || userId === "null") {
     window.location.href = "../login/login.html";
     return;
   }
 
-  fetch(`http://localhost:3000/job/${userId}`)
-    .then(response => response.json())
-    .then(data => {
-      if (data && Array.isArray(data)) {
-        displayJobs(data);
-      }
-    })
-    .catch(error => {
-      console.error("Error loading jobs:", error);
-      alert("Failed to load jobs.");
+  const welcomeEl = document.getElementById("welcomeUser");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const jobForm = document.getElementById("jobForm");
+  const jobNameInput = document.getElementById("jobname");
+  const descInput = document.getElementById("description");
+  const tbody = document.getElementById("jobList");
+  const deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
+
+  if (welcomeEl && username) welcomeEl.textContent = `Welcome, ${username}`;
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("userId");
+      localStorage.removeItem("username");
+      window.location.href = "../login/login.html";
     });
+  }
 
-  document.getElementById("post").addEventListener("submit", function (event) {
-    event.preventDefault();
+  const selected = new Set();
 
-    const jobname = document.getElementById("jobname").value.trim();
-    const description = document.getElementById("description").value.trim();
+  const STATUS_META = {
+    red:    { label: "Not started yet! 😞", emoji: "💤" },
+    yellow: { label: "In progress... 🤕",     emoji: "⏳" },
+    green:  { label: "Completed! 😄",       emoji: "✅" }
+  };
 
-    if (!jobname) {
-      alert("Please enter a job name.");
-      return;
-    }
+  const statusKey = () => `taskberryStatus_${userId}`;
+  const getStatusMap = () => {
+    try { return JSON.parse(localStorage.getItem(statusKey())) || {}; }
+    catch { return {}; }
+  };
+  const saveStatusMap = (map) => localStorage.setItem(statusKey(), JSON.stringify(map));
+  const setJobStatus = (jobId, status) => {
+    const map = getStatusMap();
+    map[jobId] = status;
+    saveStatusMap(map);
+  };
+  const getJobStatus = (jobId) => {
+    const map = getStatusMap();
+    return map[jobId] || null;
+  };
 
-    const job = {
-      jobname,
-      description,
-      userId
-    };
+  const escapeHTML = (s) =>
+    String(s ?? "")
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-    const method = editingJobId ? "PUT" : "POST";
-    const url = editingJobId
-      ? `http://localhost:3000/job/${editingJobId}`
-      : "http://localhost:3000/job";
+  function updateBulkDeleteState() {
+    if (!deleteSelectedBtn) return;
+    deleteSelectedBtn.disabled = selected.size === 0;
+  }
 
-    fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(job)
-    })
-      .then(response => response.json())
-      .then(data => {
-        alert(editingJobId ? "Job updated!" : "Job posted!");
-        location.reload();
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        alert("Something went wrong.");
+  async function addJob(jobname, description) {
+    try {
+      const res = await fetch("http://localhost:3000/job", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobname, description, userId })
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(data.message || `Failed to add job (${res.status}).`);
+        return;
+      }
+      if (data && data.JobID != null) {
+        setJobStatus(String(data.JobID), "red"); // default new task → red
+      }
+    } catch (err) {
+      console.error("Add Job error:", err);
+      alert("Error adding job. Please try again.");
+    }
+  }
 
-    editingJobId = null;
-  });
+  async function loadJobs() {
+    if (!tbody) return;
+    tbody.innerHTML = `<tr><td colspan="5">Loading jobs…</td></tr>`;
+    try {
+      const res = await fetch(`http://localhost:3000/job/${userId}`);
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Jobs load failed:", res.status, text);
+        tbody.innerHTML = `<tr><td colspan="5">Failed to load jobs (${res.status}).</td></tr>`;
+        return;
+      }
+      const data = await res.json();
+      if (Array.isArray(data) && data.length) {
+        displayJobs(data);
+      } else {
+        tbody.innerHTML = `<tr><td colspan="5">No jobs found.</td></tr>`;
+      }
+    } catch (err) {
+      console.error("Error loading jobs:", err);
+      tbody.innerHTML = `<tr><td colspan="5">Failed to load jobs.</td></tr>`;
+    }
+  }
+
+  function renderStatusBlock(jobId) {
+    const current = getJobStatus(String(jobId));
+    const active = (s) => (current === s ? " active" : "");
+    return `
+      <div class="status-wrap" data-id="${jobId}">
+        <div class="status-dots">
+          <button type="button" class="status-dot red${active("red")}" data-status="red" title="Not started"></button>
+          <button type="button" class="status-dot yellow${active("yellow")}" data-status="yellow" title="In progress"></button>
+          <button type="button" class="status-dot green${active("green")}" data-status="green" title="Completed"></button>
+        </div>
+        <div class="status-label"></div>
+      </div>
+    `;
+  }
+
+  function applyStatusUI(jobId, wrap) {
+    const current = getJobStatus(String(jobId)) || "red";
+    wrap.querySelectorAll(".status-dot").forEach(d => d.classList.remove("active"));
+    const dot = wrap.querySelector(`.status-dot.${current}`);
+    if (dot) dot.classList.add("active");
+    const { label, emoji } = STATUS_META[current];
+    const labelEl = wrap.querySelector(".status-label");
+    if (labelEl) labelEl.textContent = `${emoji} ${label}`;
+  }
 
   function displayJobs(jobs) {
-    const jobsContainer = document.querySelector("#jobList");
-    jobsContainer.innerHTML = "";
+    if (!tbody) return;
+    selected.clear();
+    updateBulkDeleteState();
+    tbody.innerHTML = "";
 
-    jobs.forEach(job => {
-      const jobRow = document.createElement("tr");
-      jobRow.classList.add("job-row");
+    jobs.forEach((job) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-select"><input type="checkbox" class="row-select" data-id="${job.JobID}"/></td>
+        <td class="col-id">${job.JobID}</td>
+        <td class="col-name">${escapeHTML(job.Jobname)}</td>
+        <td class="col-desc">${escapeHTML(job.Description)}</td>
+        <td class="col-status">${renderStatusBlock(job.JobID)}</td>
+      `;
+      tbody.appendChild(tr);
 
-      const jobIdCell = document.createElement("td");
-      jobIdCell.classList.add("job-cell");
-      jobIdCell.textContent = job.JobID;
-
-      const jobNameCell = document.createElement("td");
-      jobNameCell.classList.add("job-cell");
-      jobNameCell.textContent = job.Jobname;
-
-      const jobDescCell = document.createElement("td");
-      jobDescCell.classList.add("job-cell");
-      jobDescCell.textContent = job.Description;
-
-      const actionCell = document.createElement("td");
-
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "Edit";
-      editBtn.onclick = () => populateForm(job);
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Delete";
-      deleteBtn.onclick = () => deleteJob(job.JobID);
-
-      actionCell.appendChild(editBtn);
-      actionCell.appendChild(deleteBtn);
-
-      jobRow.appendChild(jobIdCell);
-      jobRow.appendChild(jobNameCell);
-      jobRow.appendChild(jobDescCell);
-      jobRow.appendChild(actionCell);
-
-      jobsContainer.appendChild(jobRow);
+      const wrap = tr.querySelector(".status-wrap");
+      if (wrap) applyStatusUI(job.JobID, wrap);
     });
   }
 
-  function populateForm(job) {
-    document.getElementById("jobname").value = job.Jobname;
-    document.getElementById("description").value = job.Description;
-    editingJobId = job.JobID;
+  tbody.addEventListener("change", (e) => {
+    const cb = e.target.closest(".row-select");
+    if (!cb) return;
+    const id = cb.getAttribute("data-id");
+    if (cb.checked) selected.add(id);
+    else selected.delete(id);
+    updateBulkDeleteState();
+  });
+
+  tbody.addEventListener("click", (e) => {
+    const dot = e.target.closest(".status-dot");
+    if (!dot) return;
+    const wrap = dot.closest(".status-wrap");
+    const jobId = wrap?.getAttribute("data-id");
+    const status = dot.getAttribute("data-status");
+    if (!jobId || !status) return;
+    setJobStatus(String(jobId), status);
+    applyStatusUI(jobId, wrap);
+  });
+
+  deleteSelectedBtn?.addEventListener("click", async () => {
+    if (selected.size === 0) return;
+    if (!confirm(`Delete ${selected.size} selected job(s)?`)) return;
+    try {
+      await Promise.all([...selected].map(id =>
+        fetch(`http://localhost:3000/job/${id}`, { method: "DELETE" })
+      ));
+      selected.clear();
+      updateBulkDeleteState();
+      await loadJobs();
+    } catch (err) {
+      console.error("Bulk delete error:", err);
+      alert("Failed to delete one or more jobs.");
+    }
+  });
+
+  if (jobForm) {
+    jobForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const jobname = (jobNameInput?.value || "").trim();
+      const description = (descInput?.value || "").trim();
+      if (!jobname) {
+        alert("Please enter a job name.");
+        return;
+      }
+      await addJob(jobname, description);
+      jobForm.reset();
+      await loadJobs();
+    });
   }
 
-  function deleteJob(jobId) {
-    if (!confirm("Are you sure you want to delete this job?")) return;
-
-    fetch(`http://localhost:3000/job/${jobId}`, {
-      method: "DELETE"
-    })
-      .then(res => res.json())
-      .then(() => {
-        alert("Job deleted.");
-        location.reload();
-      })
-      .catch(err => {
-        console.error("Delete error:", err);
-        alert("Failed to delete.");
-      });
-  }
+  loadJobs();
 });

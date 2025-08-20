@@ -1,0 +1,183 @@
+body {
+    background-image: url(../Images/to-do.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: lightpink;
+    background-position: left center;
+    background-attachment: fixed;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.content {
+    position: relative;
+    max-width: 800px;
+    margin: 200px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-details{
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+input[type="text"], 
+input[type="password"] {
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height:auto;
+}
+
+main { flex-grow: 1; }
+
+header {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    top: 15px;
+    background-color: #333;
+    color: white;
+    width: 98%;
+    height: 80px;
+    padding-left: 20px;
+    border-radius: 10px;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 20px;
+    background-color: #333;
+    color: white;
+    padding-left: 5px;
+    width: 98%;
+    padding-left: 20px;
+    border-radius: 10px;
+}
+
+:root {
+    --btn-bg: bisque;
+    --btn-hover-bg: #e9caa6;
+    --btn-active-bg: chocolate;
+    --btn-color: inherit;
+    --btn-radius: 10px;
+    --btn-padding: 10px 15px;
+    --btn-font-size: 30px;
+    --btn-margin: 10px;
+    --btn-border: none;
+    --btn-transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.05s ease;
+}
+
+:is(
+  button,
+  .submit-button,
+  .delete-btn,
+  .deleteBtn,
+  #deleteAllBtn,
+  input[type="button"],
+  input[type="submit"]
+) {
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border: var(--btn-border);
+    padding: var(--btn-padding);
+    border-radius: var(--btn-radius);
+    font-size: var(--btn-font-size);
+    margin: var(--btn-margin);
+    cursor: pointer;
+    transition: var(--btn-transition);
+}
+
+:is(
+  button,
+  .submit-button,
+  .delete-btn,
+  .deleteBtn,
+  #deleteAllBtn,
+  input[type="button"],
+  input[type="submit"]
+):hover {
+    background-color: var(--btn-hover-bg);
+}
+
+:is(
+  button,
+  .submit-button,
+  .delete-btn,
+  .deleteBtn,
+  #deleteAllBtn,
+  input[type="button"],
+  input[type="submit"]
+):active {
+    background-color: var(--btn-active-bg);
+    transform: translateY(1px);
+}
+
+:is(
+  button,
+  .submit-button,
+  .delete-btn,
+  .deleteBtn,
+  #deleteAllBtn,
+  input[type="button"],
+  input[type="submit"]
+):disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.delete-all-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2b9b9;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.job-row { }
+.job-cell { }
+
+.job-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: transparent;
+    color: inherit;
+    border-top: 1px solid #ccc;
+}

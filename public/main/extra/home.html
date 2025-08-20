@@ -9,7 +9,10 @@
 <body>
     <div class="wrapper">
         <header>
-            <h1>List Down</h1>
+            <div class="brandline">
+            <h1 class="site-title">TaskBerry</h1>
+            <span class="slogan">- procrastination who??</span>
+          </div>
             <div>
                 <nav>
                     <a href ="../extra/about.html"><button>About</button></a>
@@ -21,49 +24,133 @@
         </header>
         
         <main class="content">
-            <h2>Welcome!</h2>
-            
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nam distinctio aspernatur cumque architecto incidunt aliquid, ex ipsum culpa rerum, porro tenetur id at voluptas adipisci. Fugiat et reprehenderit harum.</p>
-
-            <!-- Button to fetch all users -->
+            <h2>
+              <!-- Cute TaskBerry-themed notepad with checkmark -->
+              <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"
+                   style="vertical-align:-4px; margin-right:8px;">
+                <!-- Page -->
+                <rect x="4" y="3" width="16" height="18" rx="3"
+                      fill="var(--card-bg)" stroke="currentColor" stroke-width="1.5"/>
+                <!-- Spiral rings -->
+                <circle cx="8" cy="6.2" r="0.9" fill="var(--btn-bg)"/>
+                <circle cx="12" cy="6.2" r="0.9" fill="var(--btn-bg)"/>
+                <circle cx="16" cy="6.2" r="0.9" fill="var(--btn-bg)"/>
+                <!-- Checkmark -->
+                <path d="M8 12.5l2.4 2.4L16 9.8"
+                      fill="none" stroke="var(--btn-active-bg)" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Light lines -->
+                <line x1="7" y1="15.8" x2="13.5" y2="15.8"
+                      stroke="currentColor" stroke-width="1" opacity="0.35"/>
+                <line x1="7" y1="18" x2="15.5" y2="18"
+                      stroke="currentColor" stroke-width="1" opacity="0.35"/>
+              </svg>
+              Welcome!
+            </h2>
+      
+            <section>
+              <p>
+                <strong>TaskBerry</strong> keeps your day tidy and moving. Capture what matters,
+                see everything in a clean table, and check things off with zero fuss.
+              </p>
+              <ul>
+                <li>Add jobs with optional descriptions</li>
+                <li>View your tasks in a simple, readable list</li>
+                <li>Edit or delete as you go (stay in control)</li>
+                <li>Your tasks stay tied to your account—pick up anywhere</li>
+              </ul>
+              <p>
+                New here? Click <em>Register</em>. Already have an account? Hit <em>Login</em> and get rolling.
+              </p>
+            </section>
+      
+            <hr style="margin:18px 0; opacity:.2;">
+      
             <button id="listUsersBtn">List All Users</button>
-
-            <!-- Div to display the users -->
             <div id="userList"></div>
-        </main>
+          </main>
+      
         
         <footer>
-            <h3>Kamble Tech and Co. &copy</h3>
+            <h3>Kamble Tech and Co. &copy;</h3>
         </footer>
     </div>
 
     <script>
-        document.getElementById("listUsersBtn").addEventListener("click", function () {
-            // Fetch the list of users from the backend
-            fetch("http://localhost:3000/user/getUsers")
-                .then(response => response.json())
-                .then(users => {
-                    console.log("Users fetched from the backend:", users); // Log the fetched users
-                    
-                    let userListDiv = document.getElementById("userList");
-                    userListDiv.innerHTML = "";  // Clear any previous data
-                    
-                    if (users && users.length > 0) {
-                        const userList = document.createElement("ul");
-                        users.forEach(user => {
-                            const userItem = document.createElement("li");
-                            userItem.textContent = `${user.Username} (ID: ${user.UserID})`;
-                            userList.appendChild(userItem);
-                        });
-                        userListDiv.appendChild(userList);
-                    } else {
-                        userListDiv.textContent = "No users found.";
-                    }
-                })
-                .catch(error => {
-                    console.error("Error fetching users:", error);
-                    alert("Failed to fetch users.");
-                });
+        const userListDiv = document.getElementById("userList");
+
+        // List all users
+        document.getElementById("listUsersBtn").addEventListener("click", async () => {
+            try {
+                const response = await fetch("http://localhost:3000/user/getUsers");
+                const users = await response.json();
+                console.log("Users fetched:", users);
+
+                userListDiv.innerHTML = ""; // clear old content
+
+                if (users && users.length > 0) {
+                    // Create table
+                    const table = document.createElement("table");
+                    table.id = "userTable";
+
+                    // Table header
+                    const thead = document.createElement("thead");
+                    thead.innerHTML = `
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Action</th>
+                        </tr>
+                    `;
+                    table.appendChild(thead);
+
+                    // Table body
+                    const tbody = document.createElement("tbody");
+                    users.forEach(user => {
+                        const row = document.createElement("tr");
+                        row.classList.add("job-row");
+
+                        row.innerHTML = `
+                            <td class="job-cell">${user.UserID}</td>
+                            <td class="job-cell">${user.Username}</td>
+                            <td class="job-cell"><button class="delete-btn">Delete</button></td>
+                        `;
+
+                        // Delete button action
+                        row.querySelector(".delete-btn").onclick = async () => {
+                            await fetch(`http://localhost:3000/user/${user.UserID}`, {
+                                method: "DELETE"
+                            });
+                            row.remove(); // remove row from DOM
+                        };
+
+                        tbody.appendChild(row);
+                    });
+                    table.appendChild(tbody);
+
+                    userListDiv.appendChild(table);
+
+                    // Delete all button at bottom-right
+                    const deleteAllContainer = document.createElement("div");
+                    deleteAllContainer.className = "delete-all-container";
+                    const deleteAllBtn = document.createElement("button");
+                    deleteAllBtn.id = "deleteAllBtn";
+                    deleteAllBtn.textContent = "Delete All Users";
+
+                    deleteAllBtn.onclick = async () => {
+                        await fetch("http://localhost:3000/user", { method: "DELETE" });
+                        userListDiv.innerHTML = "All users deleted.";
+                    };
+
+                    deleteAllContainer.appendChild(deleteAllBtn);
+                    userListDiv.appendChild(deleteAllContainer);
+                } else {
+                    userListDiv.textContent = "No users found.";
+                }
+            } catch (error) {
+                console.error("Error fetching users:", error);
+                alert("Failed to fetch users.");
+            }
         });
     </script>
 </body>

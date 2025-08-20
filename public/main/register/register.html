@@ -1,40 +1,59 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="../../styles/style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register · TaskBerry</title>
+  <link rel="stylesheet" href="../../styles/style.css">
 </head>
 <body>
-    <div class="wrapper">
-        <header>
-            <h1>Registration</h1>
-            <nav>
-                <a href ="../extra/home.html"><button>Home</button></a>
-                <a href ="../extra/about.html"><button>About</button></a>
-                <a href ="../extra/contactus.html"><button>Contact Us</button></a>
-                <a href ="../login/login.html"><button>Login</button></a>
-            </nav>
-        </header>
+  <div class="wrapper">
+    <header>
+      <div class="brandline">
+        <h1 class="site-title">TaskBerry</h1>
+        <span class="slogan">- procrastination who??</span>
+      </div>
+      <nav>
+        <a href="../extra/home.html"><button>Home</button></a>
+        <a href="../extra/about.html"><button>About</button></a>
+        <a href="../extra/contactus.html"><button>Contact Us</button></a>
+        <a href="../login/login.html"><button>Login</button></a>
+      </nav>
+    </header>
 
-        <main class="content">
-            
-            <h1>Register here!</h1>
+    <main class="content auth-card">
+      <h2 style="display:flex; align-items:center; gap:8px; margin-top:0;">
+        <!-- signup icon -->
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="7.5" r="3.2" fill="var(--card-bg)" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M4.8 19.2c.8-3.4 3.9-5.6 7.2-5.6s6.4 2.2 7.2 5.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M19.2 6.2v2.1M20.3 7.2h-2.2" stroke="var(--btn-bg)" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        Create your account
+      </h2>
+      <p style="margin-top:4px; opacity:.85;">Sign up to save your jobs and pick up where you left off.</p>
 
-            <form id="register">
-                <input type="text" id="username" name="username" placeholder="Enter username" required />
-                <input type="password" id="password" name="password" placeholder="Enter password" required />
-                <button type="submit">Register</button>
-            </form>
-            
-        </main>
+      <form id="register" autocomplete="on" style="margin-top:12px;">
+        <label for="username">Username</label><br/>
+        <input type="text" id="username" name="username" placeholder="Enter username" autocomplete="username" required />
+        <br/>
+        <label for="password">Password</label><br/>
+        <input type="password" id="password" name="password" placeholder="Enter password" autocomplete="new-password" required />
+        <br/>
+        <button type="submit" class="submit-button">Register</button>
+      </form>
 
-        <footer>
-            <h3>Kamble Tech and Co. &copy</h3>
-        </footer>
-    </div>
-    <script src="register.js"></script>
+      <p style="margin-top:10px;">
+        Already have an account?
+        <a href="../login/login.html" style="text-decoration:underline;">Log in</a>.
+      </p>
+    </main>
+
+    <footer>
+      <h3>Kamble Tech and Co. &copy;</h3>
+    </footer>
+  </div>
+
+  <script src="register.js" defer></script>
 </body>
 </html>

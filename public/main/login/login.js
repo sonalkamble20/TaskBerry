@@ -1,39 +1,35 @@
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("login").addEventListener('submit', function(event) {
-        event.preventDefault();
+document.getElementById("login").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-        const userName = document.getElementById("uname").value;
-        const password = document.getElementById("password").value;
+  const username = document.getElementById("uname").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-        const user = {
-            username: userName,
-            password: password
-        };
+  if (!username || !password) {
+    alert("Please enter both username and password.");
+    return;
+  }
 
-        console.log("User logging in: ", user);
-
-        fetch('http://localhost:3000/user/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                alert(data.message);  // e.g. "Invalid username or password"
-            } else {
-                console.log("Login successful:", data);
-
-                // ✅ Save the user ID returned from backend
-                localStorage.setItem("userId", data.UserID);
-                localStorage.setItem("user", JSON.stringify(data)); // optional
-
-                // ✅ Redirect to post.html
-                window.location.href = "../../main/job/post.html";
-            }
-        })
-        .catch(error => console.log("Error:", error));
+  try {
+    const res = await fetch("http://localhost:3000/user/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
     });
+
+    const data = await res.json();
+
+    const id = data?.UserID ?? data?.userid ?? data?.id;
+    const name = data?.Username ?? data?.username ?? data?.name ?? username;
+
+    if (res.ok && id) {
+      localStorage.setItem("userId", String(id));
+      localStorage.setItem("username", String(name));
+      window.location.href = "../job/post.html";  // from /main/login/ -> /main/job/
+    } else {
+      alert(data?.message || "Login failed. Please try again.");
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("An error occurred while logging in. Please try again.");
+  }
 });

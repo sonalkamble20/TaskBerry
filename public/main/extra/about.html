@@ -1,37 +1,102 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <link rel="stylesheet" href="../../styles/style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About · TaskBerry</title>
+  <link rel="stylesheet" href="../../styles/style.css">
 </head>
 <body>
-    <div class="wrapper">
-        <header>
-            <h1>About Us</h1>
-            <div>
-                <nav>
-                    <a href ="../extra/home.html"><button>Home</button></a>
-                    <a href ="../extra/contactus.html"><button>Contact Us</button></a>
-                    <a href ="../login/login.html"><button>Login</button></a>
-                    <a href ="../register/register.html"><button>Register</button></a>
-                </nav>
-            </div>
-        </header>
+  <div class="wrapper">
+    <header>
+      <div class="brandline">
+        <h1 class="site-title">TaskBerry</h1>
+        <span class="slogan">- procrastination who??</span>
+      </div>
+      <nav>
+        <a href="../extra/home.html"><button>Home</button></a>
+        <a href="../extra/contactus.html"><button>Contact Us</button></a>
+        <a href="../login/login.html"><button>Login</button></a>
+        <a href="../register/register.html"><button>Register</button></a>
+      </nav>
+    </header>
 
-        <main class="content">
-            <h2>Welcome!</h2>
-        
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nam distinctio aspernatur cumque architecto incidunt aliquid, ex ipsum culpa rerum, porro tenetur id at voluptas adipisci. Fugiat et reprehenderit harum.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nam distinctio aspernatur cumque architecto incidunt aliquid, ex ipsum culpa rerum, porro tenetur id at voluptas adipisci. Fugiat et reprehenderit harum.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nam distinctio aspernatur cumque architecto incidunt aliquid, ex ipsum culpa rerum, porro tenetur id at voluptas adipisci. Fugiat et reprehenderit harum.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nam distinctio aspernatur cumque architecto incidunt aliquid, ex ipsum culpa rerum, porro tenetur id at voluptas adipisci. Fugiat et reprehenderit harum.</p>
-        </main>
-    
-        <footer>
-            <h3>Kamble Tech and Co. &copy</h3>
-        </footer>
-    </div>
-    
+    <main class="content">
+      <h2>
+        <!-- Berry icon (distinct from the notepad used elsewhere) -->
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-4px; margin-right:6px;">
+          <!-- berry body -->
+          <circle cx="12" cy="13" r="6.5" fill="#ef476f" stroke="currentColor" stroke-width="1.2"/>
+          <!-- seeds -->
+          <circle cx="9.3" cy="11.8" r="0.6" fill="rgba(255,255,255,.7)"/>
+          <circle cx="12.1" cy="12.9" r="0.55" fill="rgba(255,255,255,.65)"/>
+          <circle cx="14.4" cy="11.2" r="0.55" fill="rgba(255,255,255,.65)"/>
+          <circle cx="10.6" cy="14.8" r="0.55" fill="rgba(255,255,255,.6)"/>
+          <circle cx="13.8" cy="15.2" r="0.55" fill="rgba(255,255,255,.6)"/>
+          <!-- stem -->
+          <rect x="11.5" y="5.2" width="1" height="2.4" rx="0.5" fill="#065f46"/>
+          <!-- leaf -->
+          <path d="M12 5.4c1.9-1.3 3.8-1.3 5.2 0-1.4 1.7-3.3 2.2-5.2 0Z" fill="#10b981"/>
+        </svg>
+        About TaskBerry
+      </h2>
+
+      <p>
+        <strong>TaskBerry</strong> is a lightweight to-do app built to keep you moving. It favors a clean table layout,
+        quick actions, and a calm flow—add a task, review at a glance, and check things off without friction.
+      </p>
+
+      <h3>About the developer</h3>
+      <p>
+        I’m <strong>Sonal “Sunny” Kamble</strong>, a Computer Science grad student at <strong>SUNY New Paltz</strong>.
+        TaskBerry was my first project as a grad student—started in my first semester and leveled up over summer break.
+        I enjoy building practical tools with readable code, clear UX, and solid fundamentals.
+      </p>
+
+      <h3>Why I built this</h3>
+      <p>
+        TaskBerry began as part of my Web Development Project (WDP) coursework. I wanted a real, end-to-end app:
+        user accounts, routes, data, and a UI that stays out of your way. The result is simple on purpose—and easy to extend.
+      </p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:16px 0;">
+        <div style="background:var(--card-bg); border:1px solid var(--table-border); border-radius:12px; box-shadow:var(--shadow); padding:14px;">
+          <div style="font-weight:700; margin-bottom:6px;">What you can do today</div>
+          <ul style="margin:0; padding-left:18px;">
+            <li>Register and log in</li>
+            <li>Create jobs (tasks) with descriptions</li>
+            <li>See tasks in a tidy table</li>
+            <li>Delete tasks you don’t need</li>
+          </ul>
+        </div>
+        <div style="background:var(--card-bg); border:1px solid var(--table-border); border-radius:12px; box-shadow:var(--shadow); padding:14px;">
+          <div style="font-weight:700; margin-bottom:6px;">What’s next</div>
+          <ul style="margin:0; padding-left:18px;">
+            <li>Inline edit for faster changes</li>
+            <li>Priorities, due dates & filters</li>
+            <li>Mobile polish & accessibility</li>
+            <li>Security hardening</li>
+          </ul>
+        </div>
+        <div style="background:var(--card-bg); border:1px solid var(--table-border); border-radius:12px; box-shadow:var(--shadow); padding:14px;">
+          <div style="font-weight:700; margin-bottom:6px;">Under the hood</div>
+          <ul style="margin:0; padding-left:18px;">
+            <li>HTML, CSS, Vanilla JS</li>
+            <li>Node.js + Express routes</li>
+            <li>Simple RESTful APIs</li>
+            <li>Clean, extendable structure</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        Thanks for visiting TaskBerry. I’m actively improving it—your feedback is welcome!
+      </p>
+    </main>
+
+    <footer>
+      <h3>Kamble Tech and Co. &copy;</h3>
+    </footer>
+  </div>
 </body>
 </html>

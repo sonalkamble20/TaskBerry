@@ -2,16 +2,19 @@ const express = require("express");
 const Job = require("../models/job");
 const router = express.Router();
 
+// list jobs for a user
 router.get("/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
+    if (!userId) return res.status(400).json({ message: "User ID is required" });
     const jobs = await Job.getAllJobsByUser(userId);
-    res.send(jobs);
+    res.json(jobs);
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
+// add a job
 router.post("/", async (req, res) => {
   try {
     const { jobname, description, userId } = req.body;
@@ -26,6 +29,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// update a job
 router.put("/:jobId", async (req, res) => {
   try {
     const { jobId } = req.params;
@@ -38,6 +42,7 @@ router.put("/:jobId", async (req, res) => {
   }
 });
 
+// delete a job
 router.delete("/:jobId", async (req, res) => {
   try {
     const { jobId } = req.params;

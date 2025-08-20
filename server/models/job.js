@@ -7,7 +7,7 @@ async function createTable() {
     Description TEXT,
     UserID INT NOT NULL,
     PRIMARY KEY (JobID)
-  );`
+  );`;
   await con.query(sql);
 }
 createTable();
@@ -18,6 +18,7 @@ async function getAllJobsByUser(userId) {
 }
 
 async function addJob(job) {
+  // job = { jobname, description, userId }
   let sql = `INSERT INTO Job (Jobname, Description, UserID) VALUES (?, ?, ?)`;
   let result = await con.query(sql, [job.jobname, job.description, job.userId]);
   let insertedId = result.insertId;

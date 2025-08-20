@@ -9,49 +9,59 @@ async function createTable() {
   );`;
   await con.query(sql);
 }
+createTable();
 
 // Get all users
 async function getAllUsers() {
   let sql = `SELECT * FROM User`;
   const users = await con.query(sql);
-  console.log("Fetched users:", users);  // Log users to check if data is fetched correctly
   return users;
 }
 
-
 async function register(user) {
+  // Expecting { Username, Password }
   let existing = await userExists(user.Username);
   if (existing.length > 0) throw Error("Username already exists.");
 
-  let sql = `INSERT INTO User (Username, Password)
-             VALUES (?, ?);`;
-
+  let sql = `INSERT INTO User (Username, Password) VALUES (?, ?)`;
   await con.query(sql, [user.Username, user.Password]);
 
   let newUser = await userExists(user.Username);
   return newUser[0];
 }
 
-// Login (READ)
+// Login: DO NOT lowercase the username; match DB exactly
 async function login(user) {
-  let cUser = await userExists(user.username.trim().toLowerCase());
-
-  console.log("User found:", cUser);  // Log the user from DB
+  // Expecting { username, password }
+  const uname = user.username?.trim();
+  if (!uname) throw Error("Username is required.");
+  const cUser = await userExists(uname);
   if (!cUser[0]) throw Error("Username does not exist!");
   if (cUser[0].Password !== user.password) throw Error("Password is incorrect!");
-
   return cUser[0];
 }
 
-// Check if username exists
 async function userExists(username) {
   let sql = `SELECT * FROM User WHERE Username = ?`;
   return await con.query(sql, [username]);
 }
 
-// Export all functions
+async function deleteUser(userId) {
+  let sql = `DELETE FROM User WHERE UserID = ?`;
+  await con.query(sql, [userId]);
+  return { message: `User ${userId} deleted` };
+}
+
+async function deleteAllUsers() {
+  let sql = `DELETE FROM User`;
+  await con.query(sql);
+  return { message: "All users deleted" };
+}
+
 module.exports = {
   getAllUsers,
+  register,
   login,
-  register
+  deleteUser,
+  deleteAllUsers
 };

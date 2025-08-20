@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="../../styles/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login · TaskBerry</title>
+  <link rel="stylesheet" href="../../styles/style.css">
 </head>
 <body>
-    <div class="wrapper">
-        <header>
-            <h1>Login</h1>
-            <nav>
-                <a href ="../extra/home.html"><button>Home</button></a>
-                <a href ="../extra/about.html"><button>About</button></a>
-                <a href ="../extra/contactus.html"><button>Contact Us</button></a>
-            </nav>
-        </header>
+  <div class="wrapper">
+    <header>
+      <div class="brandline">
+        <h1 class="site-title">TaskBerry</h1>
+        <span class="slogan">procrastination who??</span>
+      </div>
+      <nav>
+        <a href="../extra/home.html"><button>Home</button></a>
+        <a href="../extra/about.html"><button>About</button></a>
+        <a href="../extra/contactus.html"><button>Contact Us</button></a>
+      </nav>
+    </header>
 
-        <main class="content">
+    <main class="content auth-card">
+      <h2 style="display:flex; align-items:center; gap:8px; margin-top:0;">
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="10" width="16" height="9" rx="2" fill="var(--card-bg)" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 10V8a4 4 0 118 0v2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="12" cy="14.5" r="1.2" fill="var(--btn-bg)"/>
+        </svg>
+        Login
+      </h2>
+      <p style="margin-top:0.25rem; opacity:.85;">
+        Welcome back! Sign in to manage your jobs and keep the day moving.
+      </p>
 
-            <h1>Login here!</h1>
+      <form id="login" autocomplete="on" style="margin-top:12px;">
+        <label for="uname">Username</label><br/>
+        <input type="text" id="uname" name="username" autocomplete="username" required />
+        <br/>
+        <label for="password">Password</label><br/>
+        <input type="password" id="password" name="current-password" autocomplete="current-password" required />
+        <br/>
+        <input type="submit" value="Login" class="submit-button" />
+      </form>
 
-            <form id="login">
-                    <label for="uname">Username:</label>
-                    <input type="text" name="uname" id="uname" required>
-                    <br>
-                    <label for="password"> Password:</label>
-                    <input type="password" name="password" id="password" required>
-                    <br>
-                    <input type="submit" value="Login" class="submit-button">
-                    <br>
-            </form>
-        </main>
+      <p style="margin-top:10px;">
+        New to TaskBerry?
+        <a href="../register/register.html" style="text-decoration:underline;">Create an account</a>.
+      </p>
+    </main>
 
-        <footer>
-            <h3>Kamble Tech and Co. &copy</h3>
-        </footer>
-    </div>
-    <script src="login.js"></script>
+    <footer>
+      <h3>Kamble Tech and Co. &copy;</h3>
+    </footer>
+  </div>
+
+  <script src="login.js" defer></script>
 </body>
 </html>
