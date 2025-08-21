@@ -1,0 +1,12 @@
+# Environment files
+.env
+*.env
+.env.*
+!.env.example
+
+# Node / general
+node_modules/
+dist/
+build/
+.DS_Store
+Thumbs.db
